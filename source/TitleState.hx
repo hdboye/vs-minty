@@ -165,36 +165,24 @@ class TitleState extends MusicBeatState
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
 		// bg.antialiasing = true;
 		// bg.setGraphicSize(Std.int(bg.width * 0.6));
 		// bg.updateHitbox();
 		add(bg);
 
-		if(Main.watermarks) {
-			logoBl = new FlxSprite(-150, -100);
-			logoBl.frames = Paths.getSparrowAtlas('KadeEngineLogoBumpin');
-			logoBl.antialiasing = true;
-			logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
-			logoBl.animation.play('bump');
-			logoBl.updateHitbox();
-			// logoBl.screenCenter();
-			// logoBl.color = FlxColor.BLACK;
-		} else {
-			logoBl = new FlxSprite(-150, -100);
-			logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-			logoBl.antialiasing = true;
-			logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
-			logoBl.animation.play('bump');
-			logoBl.updateHitbox();
-			// logoBl.screenCenter();
-			// logoBl.color = FlxColor.BLACK;
-		}
+		logoBl = new FlxSprite(-150, -100);
+		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
+		logoBl.antialiasing = true;
+		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
+		logoBl.animation.play('bump');
+		logoBl.updateHitbox();
+		// logoBl.screenCenter();
+		// logoBl.color = FlxColor.BLACK;
 
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+		gfDance.animation.addByPrefix('dance', 'GF Dancing Beat', 24);
 		gfDance.antialiasing = true;
 		add(gfDance);
 		add(logoBl);
@@ -315,33 +303,11 @@ class TitleState extends MusicBeatState
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
 				// Get current version of Kade Engine
-				
-				var http = new haxe.Http("https://raw.githubusercontent.com/KadeDev/Kade-Engine/master/version.downloadMe");
-				var returnedData:Array<String> = [];
-				
-				http.onData = function (data:String)
-				{
-					returnedData[0] = data.substring(0, data.indexOf(';'));
-					returnedData[1] = data.substring(data.indexOf('-'), data.length);
-				  	if (!MainMenuState.kadeEngineVer.contains(returnedData[0].trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
-					{
-						trace('outdated lmao! ' + returnedData[0] + ' != ' + MainMenuState.kadeEngineVer);
-						OutdatedSubState.needVer = returnedData[0];
-						OutdatedSubState.currChanges = returnedData[1];
-						FlxG.switchState(new OutdatedSubState());
-					}
-					else
-					{
-						FlxG.switchState(new MainMenuState());
-					}
-				}
-				
-				http.onError = function (error) {
-				  trace('error: $error');
-				  FlxG.switchState(new MainMenuState()); // fail but we go anyway
-				}
-				
-				http.request();
+				#if web
+				FlxG.switchState(new ProPiracy());
+				#else
+				FlxG.switchState(new MainMenuState());
+				#end
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
@@ -389,12 +355,7 @@ class TitleState extends MusicBeatState
 		super.beatHit();
 
 		logoBl.animation.play('bump');
-		danceLeft = !danceLeft;
-
-		if (danceLeft)
-			gfDance.animation.play('danceRight');
-		else
-			gfDance.animation.play('danceLeft');
+		gfDance.animation.play("dance");
 
 		FlxG.log.add(curBeat);
 
@@ -445,13 +406,16 @@ class TitleState extends MusicBeatState
 			// credTextShit.text = "Friday";
 			// credTextShit.screenCenter();
 			case 13:
-				addMoreText('Friday');
+				addMoreText('mint mod');
 			// credTextShit.visible = true;
 			case 14:
-				addMoreText('Night');
+				if(1 + Math.floor(((10000 - 1 + 1) * Math.random())) == 1337)
+					addMoreText('fart week');
+				else
+					addMoreText('full week');
 			// credTextShit.text += '\nNight';
 			case 15:
-				addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
+				addMoreText('new songs'); // credTextShit.text += '\nFunkin';
 
 			case 16:
 				skipIntro();

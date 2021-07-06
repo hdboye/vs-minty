@@ -193,10 +193,18 @@ class ResultsScreen extends FlxSubState
             if (PlayState.isStoryMode)
             {
                 FlxG.sound.playMusic(Paths.music('freakyMenu'));
-                FlxG.switchState(new MainMenuState());
+                if(FlxG.save.data.finished)
+                    FlxG.switchState(new MainMenuState());
+                else
+                    FlxG.switchState(new WowYouDidItState());
             }
             else
-                FlxG.switchState(new FreeplayState());
+            {
+                if(FlxG.save.data.finished)
+                    FlxG.switchState(new FreeplayState());
+                else
+                    FlxG.switchState(new WowYouDidItState());
+            }
         }
 
         if (FlxG.keys.justPressed.F1)

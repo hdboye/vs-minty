@@ -26,35 +26,20 @@ class StoryMenuState extends MusicBeatState
 
 	var weekData:Array<Dynamic> = [
 		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dad Battle'],
-		['Spookeez', 'South', "Monster"],
-		['Pico', 'Philly Nice', "Blammed"],
-		['Satin Panties', "High", "Milf"],
-		['Cocoa', 'Eggnog', 'Winter Horrorland'],
-		['Senpai', 'Roses', 'Thorns']
+		['Peppermint', 'Cold']
 	];
-	var curDifficulty:Int = 1;
+	var curDifficulty:Int = 2;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [true, true];
 
 	var weekCharacters:Array<Dynamic> = [
 		['', 'bf', 'gf'],
-		['dad', 'bf', 'gf'],
-		['spooky', 'bf', 'gf'],
-		['pico', 'bf', 'gf'],
-		['mom', 'bf', 'gf'],
-		['parents-christmas', 'bf', 'gf'],
-		['senpai', 'bf', 'gf']
+		['mint', 'bf', 'gf']
 	];
 
 	var weekNames:Array<String> = [
 		"",
-		"Daddy Dearest",
-		"Spooky Month",
-		"PICO",
-		"MOMMY MUST MURDER",
-		"RED SNOW",
-		"Hating Simulator ft. Moawling"
+		"mint (fart)"
 	];
 
 	var txtWeekTitle:FlxText;
@@ -346,27 +331,12 @@ class StoryMenuState extends MusicBeatState
 
 	function changeDifficulty(change:Int = 0):Void
 	{
-		curDifficulty += change;
-
-		if (curDifficulty < 0)
-			curDifficulty = 2;
-		if (curDifficulty > 2)
-			curDifficulty = 0;
+		curDifficulty = 2;
 
 		sprDifficulty.offset.x = 0;
 
-		switch (curDifficulty)
-		{
-			case 0:
-				sprDifficulty.animation.play('easy');
-				sprDifficulty.offset.x = 20;
-			case 1:
-				sprDifficulty.animation.play('normal');
-				sprDifficulty.offset.x = 70;
-			case 2:
-				sprDifficulty.animation.play('hard');
-				sprDifficulty.offset.x = 20;
-		}
+		sprDifficulty.animation.play('hard');
+		sprDifficulty.offset.x = 20;
 
 		sprDifficulty.alpha = 0;
 

@@ -20,11 +20,11 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
-	var songs:Array<SongMetadata> = [];
+	public static var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
-	var curDifficulty:Int = 1;
+	var curDifficulty:Int = 2;
 
 	var scoreText:FlxText;
 	var comboText:FlxText;
@@ -40,6 +40,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		songs = [];
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
@@ -47,6 +48,8 @@ class FreeplayState extends MusicBeatState
 			var data:Array<String> = initSonglist[i].split(':');
 			songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1]));
 		}
+		if(FlxG.save.data.finished)
+			songs.push(new SongMetadata("Freezing", 1, 'mint'));
 
 		/* 
 			if (FlxG.sound.music != null)
@@ -107,7 +110,6 @@ class FreeplayState extends MusicBeatState
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
-		add(diffText);
 
 		comboText = new FlxText(diffText.x + 100, diffText.y, 0, "", 24);
 		comboText.font = diffText.font;
@@ -219,11 +221,6 @@ class FreeplayState extends MusicBeatState
 		{
 			changeSelection(1);
 		}
-
-		if (FlxG.keys.justPressed.LEFT)
-			changeDiff(-1);
-		if (FlxG.keys.justPressed.RIGHT)
-			changeDiff(1);
 
 		if (controls.BACK)
 		{
